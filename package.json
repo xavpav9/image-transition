@@ -1,0 +1,23 @@
+{
+  "name": "image-transition",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Xavier Tondelier <xtondelier@gmail.com>",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack --config ./webpack.prod.js",
+    "dev": "npx webpack serve --config ./webpack.dev.js"
+  },
+  "devDependencies": {
+    "css-loader": "^7.1.4",
+    "html-webpack-plugin": "^5.6.7",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.3",
+    "webpack-dev-server": "^5.2.4",
+    "webpack-merge": "^6.0.1"
+  }
+}

@@ -1,0 +1,48 @@
+*, *::after, *::before {
+  margin: 0px;
+  padding: 0px;
+  line-height: 1.5;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  column-gap: 20px;
+  place-items: center;
+  height: 100vh;
+}
+
+.z-slider, .width-slider, .height-slider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: "Times New Roman" system-ui serif;
+
+  output {
+    grid-column: 1 / 3;
+    place-self: center;
+  }
+}
+
+.files {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#c {
+  width: 800px;
+  height: 500px;
+  border: 2px solid black;
+}
