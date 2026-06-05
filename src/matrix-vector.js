@@ -1,4 +1,5 @@
-function indexToMatrix(m, indices) {
+function indexToMatrix(m, indices) { 
+  // Adds code readability in deteminant calculations.
   return indices.map(val => m[val]);
 }
 
@@ -19,8 +20,8 @@ function det4(m) {
     m[3] * det3(indexToMatrix(m, [4, 5, 6, 8, 9, 10, 12, 13, 14]));
 }
 
-const m4 = (function() {
-  function multiply(a, b) {
+const m4 = (function() { // Object of functions to apply on a 4x4 matrix or two
+  function multiply(a, b) { // Multiplies two matrices
     const rowIndices = [0, 1, 2, 3];
     const columnIndices = [0, 4, 8, 12];
     let m = [];
@@ -36,7 +37,7 @@ const m4 = (function() {
     return m;
   }
 
-  function perspective(fovY, aspect, near, far) {
+  function perspective(fovY, aspect, near, far) { // Creates a frustrum from the view of the camera
     const f = 1 / Math.tan(fovY/2);
     const rangeInv = 1 / (near - far);
     return [
@@ -47,7 +48,7 @@ const m4 = (function() {
     ];
   }
 
-  function transpose(m) {
+  function transpose(m) { // Transposes matrix (changes rows to columns and vice versa)
     return [
       m[0], m[4], m[8], m[12],
       m[1], m[5], m[9], m[13],
@@ -56,7 +57,7 @@ const m4 = (function() {
     ];
   }
 
-  function inverse(m) {
+  function inverse(m) { // Inverse matrix using adjoint method
     const d = det4(m);
     const indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
     const newM = [];
@@ -73,7 +74,7 @@ const m4 = (function() {
     return transpose(newM).map(val => val/d);
   }
 
-  function lookAt(cameraPosition, target, up) {
+  function lookAt(cameraPosition, target, up) { // Make the camera look at a coordinate target
     const zAxis = v3.normalise(v3.subtract(cameraPosition, target));
     const xAxis = v3.normalise(v3.cross(up, zAxis));
     const yAxis = v3.normalise(v3.cross(zAxis, xAxis));
@@ -87,7 +88,8 @@ const m4 = (function() {
   }
 
 
-  function translation(tx, ty, tz) {
+  // By #transform# a matrix, I mean make it so that the matrix will #transform# a position in that way
+  function translation(tx, ty, tz) { // Translate a matrix
     return [
       1, 0, 0, 0,
       0, 1, 0, 0,
@@ -96,7 +98,7 @@ const m4 = (function() {
     ];
   }
 
-  function rollRotation(angle) {
+  function rollRotation(angle) { // Rotate a matrix anti-clockwise round the x-axis
     const c = Math.cos(angle);
     const s = Math.sin(angle);
     return [
@@ -107,7 +109,7 @@ const m4 = (function() {
     ];
   }
 
-  function pitchRotation(angle) {
+  function pitchRotation(angle) { // Rotate a matrix anti-clockwise round the y-axis
     const c = Math.cos(angle);
     const s = Math.sin(angle);
     return [
@@ -118,7 +120,7 @@ const m4 = (function() {
     ];
   }
 
-  function yawRotation(angle) {
+  function yawRotation(angle) { // Rotate a matrix anti-clockwise round the z-axis
     const c = Math.cos(angle);
     const s = Math.sin(angle);
     return [
@@ -129,7 +131,7 @@ const m4 = (function() {
     ];
   }
 
-  function scaling(sx, sy, sz) {
+  function scaling(sx, sy, sz) { // Scale a matrix
     return [
       sx, 0, 0, 0,
       0, sy, 0, 0,
@@ -139,6 +141,7 @@ const m4 = (function() {
   }
 
 
+  // Add code readability by abstracting multiply + transformation
   const translate = (m, t) => multiply(m, translation(t[0], t[1], t[2]));
   const rollRotate = (m, a) => multiply(m, rollRotation(a));
   const pitchRotate = (m, a) => multiply(m, pitchRotation(a));
@@ -165,7 +168,7 @@ const m4 = (function() {
     scale,
   }
 
-  Object.defineProperty(methods, "identity", {
+  Object.defineProperty(methods, "identity", { // The identity matrix
     get() {
       return [
         1, 0, 0, 0,
@@ -179,12 +182,12 @@ const m4 = (function() {
   return methods;
 })();
 
-const v3 = (function() {
-  function subtract(a, b) {
+const v3 = (function() { // Object of function to apply on a vector(s) of 3 elements
+  function subtract(a, b) { // Subtract b from a
     return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
   }
 
-  function cross(a, b) {
+  function cross(a, b) { // Cross product in direction axb
     return [
       a[1] * b[2] - a[2] * b[1],
       a[2] * b[0] - a[0] * b[2],
@@ -192,7 +195,7 @@ const v3 = (function() {
     ];
   }
 
-  function normalise(v) {
+  function normalise(v) { // Make into a unit vector
     const length = Math.sqrt(v.reduce((acc, cur) => acc + cur ** 2, 0));
     if (length < 0.000001) return [0, 0, 0];
     else return v.map(val => val / length);
@@ -205,7 +208,7 @@ const v3 = (function() {
   };
 })();
 
-const m3 = (function() {
+const m3 = (function() { // Same as m4 but for 3x3 matrices
   function multiply(a, b) {
     const rowIndices = [0, 1, 2];
     const columnIndices = [0, 4, 8];
@@ -222,7 +225,7 @@ const m3 = (function() {
     return m;
   }
 
-  function projection(width, height, flipY) {
+  function projection(width, height, flipY) { // Converts pixels to clipspace (same as (((position/resolution)*2.0-1.0)*vec(1, -1))) for flipY
 
     return [
       2/width, 0, 0,
@@ -264,7 +267,7 @@ const m3 = (function() {
     ];
   }
 
-  function rotation(angle) {
+  function rotation(angle) { // Rotate a matrix anti-clockwise
     const c = Math.cos(angle);
     const s = Math.sin(angle);
     return [

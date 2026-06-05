@@ -13,14 +13,17 @@ import vsSource from "./shaders/canvas-vs.txt";
 function main() {
   let size, type, normalise, stride, offset;
 
+  // Initialise webgl2
   const canvas = document.querySelector("#c");
   const gl = canvas.getContext("webgl2");
   if (gl === null) return;
 
+  // Create program
   const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
   const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
   const program = createProgram(gl, vs, fs);
 
+  // Get attribute and uniform locations from shader program
   const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
   const normalAttributeLocation = gl.getAttribLocation(program, "a_normal");
   const texcoordAttributeLocation = gl.getAttribLocation(program, "a_texcoord");
@@ -28,9 +31,9 @@ function main() {
   const worldViewProjectionUniformLocation = gl.getUniformLocation(program, "u_worldViewProjection");
   const lightDirectionUniformLocation = gl.getUniformLocation(program, "u_lightDirection");
   const worldInverseTransposeUniformLocation = gl.getUniformLocation(program, "u_worldInverseTranspose");
-  const colorUniformLocation = gl.getUniformLocation(program, "u_color");
   const textureUniformLocation = gl.getUniformLocation(program, "u_texture");
 
+  // Create position buffer with a 50x50x50 cube (positive Y down)
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
@@ -95,6 +98,7 @@ function main() {
   offset = 0;
   gl.vertexAttribPointer(positionAttributeLocation, size, type, normalise, stride, offset);
 
+  // Create buffer for the normals of each side of the cube
   const normalBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
@@ -156,6 +160,7 @@ function main() {
   offset = 0;
   gl.vertexAttribPointer(normalAttributeLocation, size, type, normalise, stride, offset);
   
+  // Create buffer for the coordinates of the textures to use on each side
   const texcoordBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
@@ -217,6 +222,7 @@ function main() {
   offset = 0;
   gl.vertexAttribPointer(texcoordAttributeLocation, size, type, normalise, stride, offset);
 
+  // Create each texture (front, back and side)
   let mipLevel = 0;
   let srcFormat = gl.RGBA;
   let internalFormat = gl.RGBA;
@@ -231,6 +237,7 @@ function main() {
   const sideTexture = createAndSetupTexture(gl, 2);
   gl.texImage2D(gl.TEXTURE_2D, mipLevel, srcFormat, 1, 1, 0, internalFormat, srcType, new Uint8Array([200, 200, 200, 255]));
 
+  // Set up images, which all have a fail-safe flat colour (set above)
   const frontImage = new Image();
   frontImage.src = frontImg;
 
@@ -251,6 +258,7 @@ function main() {
 
 
 
+  // Set up animation timer and variables passed to the DOM handler to allow the user to edit them via UI
   let then = 0;
 
   const properties = {
@@ -281,7 +289,7 @@ function main() {
     const timeDelta = (now - then) / 1000;
     then = now;
 
-    if (properties.worldAngle[0] >= maxAngle) {
+    if (properties.worldAngle[0] >= maxAngle) { // Transition animation has finished
       running = false;
       flipped = false;
       properties.worldAngle[0] = maxAngle % (2 * Math.PI);
@@ -309,25 +317,26 @@ function main() {
       };
     };
 
+    // Set gl.canvas and viewport dimensions
     gl.canvas.height = canvas.clientHeight;
     gl.canvas.width = canvas.clientWidth;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
+    // Set options and program
     gl.useProgram(program);
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
+    // Clear screen
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.CLEAR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.uniform4fv(colorUniformLocation, [0.8, 0.8, 0.8, 1]);
-
+    // Set up matrices for transformations
     const zNear = 1;
     const zFar = 2000;
     const aspect = gl.canvas.width / gl.canvas.height;
     const fovY = Math.PI / 3;
     const cameraPosition = [0, 0, 0];
-    const cameraRotation = [0, 0, 0];
     const lightDirection = [0, 0, -1];
 
     let worldMatrix = m4.identity;
@@ -338,17 +347,12 @@ function main() {
 
     worldMatrix = m4.scale(worldMatrix, [gl.canvas.width/100, gl.canvas.height/100, 1]);
 
-    worldMatrix = m4.yawRotate(worldMatrix, Math.PI); // partially revert the y-flip from original coords
+    worldMatrix = m4.yawRotate(worldMatrix, Math.PI); // partially revert the y-flip from original coords ( will still remain inverted )
     worldMatrix = m4.translate(worldMatrix, [-25,-25,-25]);
 
 
     let cameraMatrix = m4.identity;
     cameraMatrix = m4.translate(cameraMatrix, cameraPosition);
-    /*
-    cameraMatrix = m4.rollRotate(cameraMatrix, cameraRotation[0]);
-    cameraMatrix = m4.pitchRotate(cameraMatrix, cameraRotation[1]);
-    cameraMatrix = m4.yawRotate(cameraMatrix, cameraRotation[2]);
-    */
 
     cameraMatrix = m4.lookAt([cameraMatrix[12], cameraMatrix[13], cameraMatrix[14]], [0, 0, -5], [0, 1, 0]);
     let viewMatrix = m4.inverse(cameraMatrix);
@@ -360,10 +364,13 @@ function main() {
     let worldInverseMatrix = m4.inverse(worldMatrix);
     let worldInverseTransposeMatrix = m4.transpose(worldInverseMatrix);
 
+    // Set matrices and light direction in shaders
     gl.uniformMatrix4fv(worldViewProjectionUniformLocation, false, worldViewProjectionMatrix);
     gl.uniformMatrix4fv(worldInverseTransposeUniformLocation, false, worldInverseTransposeMatrix); 
     gl.uniform3fv(lightDirectionUniformLocation, v3.normalise(lightDirection));
 
+
+    // Display front face
     gl.uniform1i(textureUniformLocation, 0);
     primitiveType = gl.TRIANGLES;
     offset = 0;
@@ -371,12 +378,14 @@ function main() {
     gl.drawArrays(primitiveType, offset, count);
 
 
+    // Display back face
     gl.uniform1i(textureUniformLocation, 1);
     offset = 6;
     count = 6 * 1;
     gl.drawArrays(primitiveType, offset, count);
 
 
+    // Display side faces
     gl.uniform1i(textureUniformLocation, 2);
     offset = 12;
     count = 6 * 4;
@@ -386,4 +395,4 @@ function main() {
   }
 }
 
-main();
+main(); // Start rendering

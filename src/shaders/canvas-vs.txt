@@ -5,7 +5,7 @@ in vec3 a_normal;
 in vec2 a_texcoord;
 
 uniform mat4 u_worldInverseTranspose;
-uniform mat4 u_worldViewProjection;
+uniform mat4 u_worldViewProjection; // Prevents issues with normals when scaling
 
 out vec3 v_normal;
 out vec2 v_texcoord;

@@ -4,7 +4,6 @@ precision highp float;
 in vec3 v_normal;
 in vec2 v_texcoord;
 
-uniform vec4 u_color;
 uniform vec3 u_lightDirection;
 uniform sampler2D u_texture;
 
