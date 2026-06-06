@@ -23,9 +23,9 @@ function createProgram(gl, vs, fs) { // Compile a program
   }
 }
 
-function createAndSetupTexture(gl, active) { // Create a texture
+function createAndSetupTexture(gl, textureUnit) { // Create a texture
   const texture = gl.createTexture();
-  gl.activeTexture(gl.TEXTURE0 + active);
+  if (textureUnit !== null) gl.activeTexture(gl.TEXTURE0 + textureUnit);
   gl.bindTexture(gl.TEXTURE_2D, texture);
 
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // Prevent repeating on x(s)-axis

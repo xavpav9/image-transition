@@ -23,11 +23,13 @@ function handleDom(properties) {
 
   const frontImageInput = document.querySelector("#front-image");
   frontImageInput.addEventListener("change", function() {
+    properties.frontImageLoaded = false;
     properties.frontImage.src = URL.createObjectURL(this.files[0]);
   });
 
   const backImageInput = document.querySelector("#back-image");
   backImageInput.addEventListener("change", function() {
+    properties.backImageLoaded = false;
     properties.backImage.src = URL.createObjectURL(this.files[0]);
   });
 

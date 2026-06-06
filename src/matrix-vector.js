@@ -211,7 +211,7 @@ const v3 = (function() { // Object of function to apply on a vector(s) of 3 elem
 const m3 = (function() { // Same as m4 but for 3x3 matrices
   function multiply(a, b) {
     const rowIndices = [0, 1, 2];
-    const columnIndices = [0, 4, 8];
+    const columnIndices = [0, 3, 6];
     let m = [];
 
     for (let r = 0; r < 3; ++r) {
@@ -226,11 +226,12 @@ const m3 = (function() { // Same as m4 but for 3x3 matrices
   }
 
   function projection(width, height, flipY) { // Converts pixels to clipspace (same as (((position/resolution)*2.0-1.0)*vec(1, -1))) for flipY
+    const flipYMultiplier = flipY ? -1 : 1;
 
     return [
       2/width, 0, 0,
-      0, -2/height, 0,
-      -1, flipY ? -1 : 1, 1,
+      0, flipYMultiplier * 2/height, 0,
+      -1, flipYMultiplier * -1, 1,
     ];
   }
 

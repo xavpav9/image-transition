@@ -2,7 +2,7 @@ import "./style.css";
 import {m4, v3} from "./matrix-vector.js";
 import {createShader, createProgram, createAndSetupTexture} from "./shader.js";
 import {handleDom} from "./dom-handler.js";
-import {getTexture}  from "./convolution.js";
+import {setUpConvolutionTextures, setTexture}  from "./convolution.js";
 
 import frontImg from "./images/river.jpeg";
 import backImg from "./images/ducks.jpeg";
@@ -17,6 +17,8 @@ function main() {
   const canvas = document.querySelector("#c");
   const gl = canvas.getContext("webgl2");
   if (gl === null) return;
+
+  setUpConvolutionTextures(gl);
 
   // Create program
   const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
@@ -228,10 +230,10 @@ function main() {
   let internalFormat = gl.RGBA;
   let srcType = gl.UNSIGNED_BYTE;
 
-  const frontTexture = createAndSetupTexture(gl, 0);
+  let frontTexture = createAndSetupTexture(gl, 0);
   gl.texImage2D(gl.TEXTURE_2D, mipLevel, srcFormat, 1, 1, 0, internalFormat, srcType, new Uint8Array([0, 255, 0, 255]));
 
-  const backTexture = createAndSetupTexture(gl, 1);
+  let backTexture = createAndSetupTexture(gl, 1);
   gl.texImage2D(gl.TEXTURE_2D, mipLevel, srcFormat, 1, 1, 0, internalFormat, srcType, new Uint8Array([0, 0, 255, 255]));
 
   const sideTexture = createAndSetupTexture(gl, 2);
@@ -241,7 +243,10 @@ function main() {
   const frontImage = new Image();
   frontImage.src = frontImg;
 
-  frontImage.addEventListener("load", evt => {
+  frontImage.addEventListener("load", function(evt) {
+    properties.frontImageLoaded = true;
+    properties.frontImageDimensions = [this.width, this.height];
+
     gl.activeTexture(gl.TEXTURE0 + 0);
     gl.bindTexture(gl.TEXTURE_2D, frontTexture);
     gl.texImage2D(gl.TEXTURE_2D, mipLevel, srcFormat, internalFormat, srcType, frontImage);
@@ -250,7 +255,10 @@ function main() {
   const backImage = new Image();
   backImage.src = backImg;
 
-  backImage.addEventListener("load", evt => {
+  backImage.addEventListener("load", function(evt) {
+    properties.backImageLoaded = true;
+    properties.backImageDimensions = [this.width, this.height];
+
     gl.activeTexture(gl.TEXTURE0 + 1);
     gl.bindTexture(gl.TEXTURE_2D, backTexture);
     gl.texImage2D(gl.TEXTURE_2D, mipLevel, srcFormat, internalFormat, srcType, backImage);
@@ -267,8 +275,13 @@ function main() {
     worldTranslation: [0, 0, 0],
     rotationSpeed: 0.5,
     translationSpeed: -90,
+
     backImage,
     frontImage,
+    frontImageLoaded: false,
+    frontImageDimensions: [0, 0],
+    backImageLoaded: false,
+    backImageDimensions: [0, 0],
   };
 
   handleDom(properties);
@@ -317,6 +330,17 @@ function main() {
       };
     };
 
+
+    // Apply convolution kernel effects to textures
+    if (properties.frontImageLoaded) {
+      setTexture(gl, frontTexture, ["edgeDetect"], 0);
+    }
+
+    if (properties.backImageLoaded) {
+      setTexture(gl, backTexture, ["sharpen", "sharpen"], 1);
+    }
+
+
     // Set gl.canvas and viewport dimensions
     gl.canvas.height = canvas.clientHeight;
     gl.canvas.width = canvas.clientWidth;
@@ -324,6 +348,7 @@ function main() {
 
     // Set options and program
     gl.useProgram(program);
+    gl.bindVertexArray(vao);
     gl.enable(gl.CULL_FACE);
     gl.enable(gl.DEPTH_TEST);
 
@@ -370,6 +395,7 @@ function main() {
     gl.uniform3fv(lightDirectionUniformLocation, v3.normalise(lightDirection));
 
 
+
     // Display front face
     gl.uniform1i(textureUniformLocation, 0);
     primitiveType = gl.TRIANGLES;
@@ -393,6 +419,7 @@ function main() {
 
     requestAnimationFrame(drawScene);
   }
+
 }
 
 main(); // Start rendering
