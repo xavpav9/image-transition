@@ -1,5 +1,4 @@
-function indexToMatrix(m, indices) { 
-  // Adds code readability in deteminant calculations.
+function indexToMatrix(m, indices) { // Adds code readability in deteminant calculations.
   return indices.map(val => m[val]);
 }
 

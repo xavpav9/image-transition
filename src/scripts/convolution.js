@@ -1,7 +1,7 @@
 import {m3} from "./matrix-vector.js";
 import {createShader, createProgram, createAndSetupTexture} from "./shader.js";
-import vsSource from "./shaders/convolution-vs.txt";
-import fsSource from "./shaders/convolution-fs.txt";
+import vsSource from "./../res/shaders/convolution-vs.txt";
+import fsSource from "./../res/shaders/convolution-fs.txt";
 
 // Set up global convolution variables in an object
 const convolutionVars = {

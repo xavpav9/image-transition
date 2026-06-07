@@ -1,13 +1,13 @@
-import "./style.css";
+import "./../style.css";
 import {m4, v3} from "./matrix-vector.js";
 import {createShader, createProgram, createAndSetupTexture} from "./shader.js";
 import {handleDom} from "./dom-handler.js";
-import {setUpConvolutionTextures, setTexture}  from "./convolution.js";
+import {setUpConvolutionTextures, setTexture} from "./convolution.js";
 
-import frontImg from "./images/river.jpeg";
-import backImg from "./images/ducks.jpeg";
-import fsSource from "./shaders/canvas-fs.txt";
-import vsSource from "./shaders/canvas-vs.txt";
+import frontImg from "./../res/images/river.jpeg";
+import backImg from "./../res/images/ducks.jpeg";
+import fsSource from "./../res/shaders/canvas-fs.txt";
+import vsSource from "./../res/shaders/canvas-vs.txt";
 
 
 function main() {
