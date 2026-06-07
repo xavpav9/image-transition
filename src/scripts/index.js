@@ -358,7 +358,7 @@ function main() {
 
     // Set up matrices for transformations
     const zNear = 1;
-    const zFar = 2000;
+    const zFar = 20000;
     const aspect = gl.canvas.width / gl.canvas.height;
     const fovY = Math.PI / 3;
     const cameraPosition = [0, 0, 0];

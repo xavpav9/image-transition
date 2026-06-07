@@ -23,14 +23,25 @@
           <input type="file" id="back-image" accept="image/png, image/jpeg">
         </div>
         <div class="width-slider">
-          <label for="width">Width</label>
+          <label for="width-slider">Width</label>
           <input type="range" id="width-slider" max="800" min="0" step="1" value="800" list="dimensions">
           <output for="width-slider"> </output>
         </div>
         <div class="height-slider">
-          <label for="height">Height</label>
+          <label for="height-slider">Height</label>
           <input type="range" id="height-slider" max="500" min="0" step="1" value="500" list="dimensions">
           <output for="height-slider"> </output>
+        </div>
+        <div class="rotation-speed-slider">
+          <label for="rotation-speed-slider">Rotation Speed</label>
+          <input type="range" id="rotation-speed-slider" max="360" min="1" step="1" value="30" list="rotation-speeds">
+          <output for="rotation-speed-slider"> </output>
+        </div>
+
+        <div class="translation-speed-slider">
+          <label for="translation-speed-slider">Translation Speed</label>
+          <input type="range" id="translation-speed-slider" max="1000" min="1" step="1" value="90" list="translation-speeds">
+          <output for="translation-speed-slider"> </output>
         </div>
 
         <datalist id="dimensions">
@@ -43,6 +54,20 @@
           <option value="600"></option>
           <option value="700"></option>
           <option value="800"></option>
+        </datalist>
+
+        <datalist id="rotation-speeds">
+          <option value="1"></option>
+          <option value="90"></option>
+          <option value="180"></option>
+          <option value="270"></option>
+          <option value="360"></option>
+        </datalist>
+
+        <datalist id="translation-speeds">
+          <option value="1"></option>
+          <option value="500"></option>
+          <option value="1000"></option>
         </datalist>
       </form>
     </div>
