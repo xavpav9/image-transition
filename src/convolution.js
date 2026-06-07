@@ -135,8 +135,25 @@ function setTexture(gl, originalImageTexture, effectsToApply, textureUnit) {
       -1, 5, -1,
       0, -1, 0,
     ],
+    sharpen: [
+      0, -1, 0,
+      -1, 5, -1,
+      0, -1, 0,
+    ],
+    blur: [
+      1, 1, 1,
+      1, 1, 1,
+      1, 1, 1,
+    ]
   };
 
+  // Resize the textures that will be used for image transformation to the correct width and height
+  for (let texture of convolutionVars.textures.slice(textureUnit*2, textureUnit*2+2)) {
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.canvas.clientWidth, gl.canvas.clientHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  }
+
+  // Bind original texture
   gl.bindTexture(gl.TEXTURE_2D, originalImageTexture);
 
   // Apply the kernels
@@ -158,14 +175,13 @@ function setTexture(gl, originalImageTexture, effectsToApply, textureUnit) {
   function drawEffect(kernel) {
     let primitiveType, offset, count;
 
-    const projectionMatrix = m3.projection(gl.canvas.width, gl.canvas.height, false);
-    const worldProjectionMatrix = m3.scale(projectionMatrix, [gl.canvas.width, gl.canvas.height]);
+    const projectionMatrix = m3.projection(1, 1, false);
     const kernelWeight = computeKernelWeight(kernel);
 
     // Set up the kernel, weight and matrix
     gl.uniform1fv(convolutionVars.kernelUniformLocation, kernel);
     gl.uniform1f(convolutionVars.kernelWeightUniformLocation, kernelWeight);
-    gl.uniformMatrix3fv(convolutionVars.matrixUniformLocation, false, worldProjectionMatrix);
+    gl.uniformMatrix3fv(convolutionVars.matrixUniformLocation, false, projectionMatrix);
 
     primitiveType = gl.TRIANGLES;
     offset = 0;

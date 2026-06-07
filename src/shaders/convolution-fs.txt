@@ -22,8 +22,8 @@ void main() {
     texture(u_image, v_texcoord + onePixel*vec2(0,0)) * u_kernel[4] +
     texture(u_image, v_texcoord + onePixel*vec2(1,0)) * u_kernel[5] +
 
-    texture(u_image, v_texcoord + onePixel*vec2(-1,-1)) *u_kernel[6] +
-    texture(u_image, v_texcoord + onePixel*vec2(0,-1)) * u_kernel[7] +
-    texture(u_image, v_texcoord + onePixel*vec2(1,-1)) * u_kernel[8]
+    texture(u_image, v_texcoord + onePixel*vec2(-1,1)) *u_kernel[6] +
+    texture(u_image, v_texcoord + onePixel*vec2(0,1)) * u_kernel[7] +
+    texture(u_image, v_texcoord + onePixel*vec2(1,1)) * u_kernel[8]
   ) / u_kernelWeight).rgb, 1);
 }
