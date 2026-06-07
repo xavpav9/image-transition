@@ -11,7 +11,7 @@ body {
 .container {
   display: grid;
   grid-template-columns: 1fr 300px;
-  column-gap: 20px;
+  column-gap: 0px;
   max-height: 100vh;
 }
 
@@ -53,7 +53,7 @@ form {
       flex-direction: column;
       align-items: center;
       gap: 2px;
-      margin-bottom: 8px;
+      margin-bottom: 20px;
       font-family: "Times New Roman" system-ui serif;
 
       output {
@@ -92,10 +92,30 @@ form {
 .canvas {
   place-self: center;
   max-height: 100vh;
+  padding: 10px;
 
   #c {
     width: 800px;
     height: 500px;
     border: 2px solid black;
+  }
+}
+
+@media (max-width: 1150px) {
+  .container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 600px 1fr;
+    column-gap: 0px;
+    max-height: none;
+
+    form {
+      border-top: 2px solid black;
+      border-left: none;
+      max-height: none;
+    }
+  }
+
+  .canvas {
+    padding: 20px;
   }
 }

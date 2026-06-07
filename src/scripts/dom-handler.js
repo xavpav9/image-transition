@@ -1,6 +1,15 @@
 function handleDom(properties) {
   const canvas = document.querySelector("#c");
 
+  const previousDimensions = {
+    setWidth: true,
+    setHeight: true,
+    maxWidth: 0,
+    maxHeight: 0,
+    width: 800,
+    height: 500,
+  }
+
   const frontImageInput = document.querySelector("#front-image");
   frontImageInput.addEventListener("change", function() {
     properties.frontImageLoaded = false;
@@ -26,16 +35,28 @@ function handleDom(properties) {
   const widthSlider = document.querySelector("#width-slider");
   const widthSliderOutput = document.querySelector(".width-slider > output");
   widthSlider.addEventListener("input", evt => {
-    widthSliderOutput.textContent = widthSlider.value;
-    canvas.style.width = widthSlider.value + "px";
+    widthSliderOutput.textContent = `${widthSlider.value}px`;
+    canvas.style.width = `${widthSlider.value}px`;
+
+    if (previousDimensions.setWidth) {
+      previousDimensions.width = widthSlider.value;
+    } else {
+      previousDimensions.setWidth = true;
+    }
   });
 
 
   const heightSlider = document.querySelector("#height-slider");
   const heightSliderOutput = document.querySelector(".height-slider > output");
   heightSlider.addEventListener("input", evt => {
-    heightSliderOutput.textContent = heightSlider.value;
-    canvas.style.height = heightSlider.value + "px";
+    heightSliderOutput.textContent = `${heightSlider.value}px`;
+    canvas.style.height = `${heightSlider.value}px`;
+
+    if (previousDimensions.setHeight) {
+      previousDimensions.height = heightSlider.value;
+    } else {
+      previousDimensions.setHeight = true;
+    }
   });
 
 
@@ -98,6 +119,44 @@ function handleDom(properties) {
   });
 
 
+  window.addEventListener("resize", evt => {
+    // 50 is for the padding + any extra (e.g. border)
+    const widthMax = Math.min(800, window.innerWidth - 50)
+    const heightMax = Math.min(500, window.innerHeight - 50);
+
+    // When resizing, if it resizes smaller, it ensures that the canvas size is smaller than this.
+    // However, if it resizes bigger, it will try to get back to the previous size set by the user. 
+    // For example, if the canvas width was 500, then the max got set to 200, but then back to 700, the final width of the canvas would be 500, but if it only go set back up to 400, it would be 400.
+    
+    let isPreviousWidth = false, isPreviousHeight = false;
+
+    if (+widthSlider.value < previousDimensions.width) isPreviousWidth = true;
+    if (+heightSlider.value < previousDimensions.height) isPreviousHeight = true;
+
+    widthSlider.setAttribute("max", `${widthMax}`);
+    heightSlider.setAttribute("max", `${heightMax}`);
+
+    if (isPreviousWidth) {
+      if (previousDimensions.width > widthMax) widthSlider.value = `${widthMax}`;
+      else widthSlider.value = `${previousDimensions.width}`;
+    }
+    if (isPreviousHeight) {
+      if (previousDimensions.height > heightMax) heightSlider.value = `${heightMax}`;
+      else heightSlider.value = `${previousDimensions.height}`;
+    }
+
+    // Do not set this new width/height as the previous dimensions set by the user
+    previousDimensions.setWidth = false;
+    widthSlider.dispatchEvent(new Event("input"));
+
+    previousDimensions.setHeight = false;
+    heightSlider.dispatchEvent(new Event("input"));
+
+    previousDimensions.maxWidth = widthMax;
+    previousDimensions.maxHeight = heightMax;
+  });
+
+
 
 
   zSlider.dispatchEvent(new Event("input"));
@@ -115,6 +174,7 @@ function handleDom(properties) {
   frontEdgeDetect.dispatchEvent(new Event("input"));
   backEmboss.dispatchEvent(new Event("input"));
   frontEmboss.dispatchEvent(new Event("input"));
+  window.dispatchEvent(new Event("resize"));
 }
 
 function enableSpeedChanges() {
