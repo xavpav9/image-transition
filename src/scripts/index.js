@@ -3,6 +3,7 @@ import {m4, v3} from "./matrix-vector.js";
 import {createShader, createProgram, createAndSetupTexture} from "./shader.js";
 import {handleDom} from "./dom-handler.js";
 import {setUpConvolutionTextures, setTexture} from "./convolution.js";
+import {setGeometry, setNormals, setTexcoords} from "./buffer.js";
 
 import frontImg from "./../res/images/river.jpeg";
 import backImg from "./../res/images/ducks.jpeg";
@@ -38,56 +39,7 @@ function main() {
   // Create position buffer with a 50x50x50 cube (positive Y down)
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    //front
-    0, 0, 50,
-    50, 0, 50,
-    0, 50, 50,
-    0, 50, 50,
-    50, 0, 50,
-    50, 50, 50,
-
-    //back
-    50, 0, 0,
-    0, 0, 0,
-    50, 50, 0,
-    50, 50, 0,
-    0, 0, 0,
-    0, 50, 0,
-
-    //top
-    50, 0, 50,
-    0, 0, 50,
-    50, 0, 0,
-    50, 0, 0,
-    0, 0, 50,
-    0, 0, 0,
-
-    //bottom
-    0, 50, 50,
-    50, 50, 50,
-    0, 50, 0,
-    0, 50, 0,
-    50, 50, 50,
-    50, 50, 0,
-
-    //right
-    50, 0, 50,
-    50, 0, 0,
-    50, 50, 50,
-    50, 50, 50,
-    50, 0, 0,
-    50, 50, 0,
-
-    //left
-    0, 0, 0,
-    0, 0, 50,
-    0, 50, 0,
-    0, 50, 0,
-    0, 0, 50,
-    0, 50, 50,
-
-  ]), gl.STATIC_DRAW);
+  setGeometry(gl);
 
   const vao = gl.createVertexArray();
   gl.bindVertexArray(vao);
@@ -103,56 +55,7 @@ function main() {
   // Create buffer for the normals of each side of the cube
   const normalBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    //front
-    0, 0, 1,
-    0, 0, 1,
-    0, 0, 1,
-    0, 0, 1,
-    0, 0, 1,
-    0, 0, 1,
-
-    //back
-    0, 0, -1,
-    0, 0, -1,
-    0, 0, -1,
-    0, 0, -1,
-    0, 0, -1,
-    0, 0, -1,
-
-    //top
-    0, -1, 0,
-    0, -1, 0,
-    0, -1, 0,
-    0, -1, 0,
-    0, -1, 0,
-    0, -1, 0,
-
-    //bottom
-    0, 1, 0,
-    0, 1, 0,
-    0, 1, 0,
-    0, 1, 0,
-    0, 1, 0,
-    0, 1, 0,
-
-    //right
-    1, 0, 0,
-    1, 0, 0,
-    1, 0, 0,
-    1, 0, 0,
-    1, 0, 0,
-    1, 0, 0,
-
-    //left
-    -1, 0, 0,
-    -1, 0, 0,
-    -1, 0, 0,
-    -1, 0, 0,
-    -1, 0, 0,
-    -1, 0, 0,
-
-  ]), gl.STATIC_DRAW);
+  setNormals(gl);
 
   gl.enableVertexAttribArray(normalAttributeLocation);
   size = 3;
@@ -165,56 +68,7 @@ function main() {
   // Create buffer for the coordinates of the textures to use on each side
   const texcoordBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, texcoordBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    //front
-    1, 0,
-    0, 0,
-    1, 1,
-    1, 1,
-    0, 0,
-    0, 1,
-
-    //back
-    1, 0,
-    0, 0,
-    1, 1,
-    1, 1,
-    0, 0,
-    0, 1,
-
-    //top
-    0, 0,
-    0, 1,
-    1, 0,
-    1, 0,
-    0, 1,
-    1, 1,
-
-    //bottom
-    0, 0,
-    0, 1,
-    1, 0,
-    1, 0,
-    0, 1,
-    1, 1,
-
-    //right
-    0, 0,
-    0, 1,
-    1, 0,
-    1, 0,
-    0, 1,
-    1, 1,
-
-    //left
-    0, 0,
-    0, 1,
-    1, 0,
-    1, 0,
-    0, 1,
-    1, 1,
-
-  ]), gl.STATIC_DRAW);
+  setTexcoords(gl);
 
   gl.enableVertexAttribArray(texcoordAttributeLocation);
   size = 2;
