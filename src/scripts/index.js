@@ -1,7 +1,7 @@
 import "./../style.css";
 import {m4, v3} from "./matrix-vector.js";
 import {createShader, createProgram, createAndSetupTexture} from "./shader.js";
-import {handleDom} from "./dom-handler.js";
+import {handleDom, enableSpeedChanges, disableSpeedChanges} from "./dom-handler.js";
 import {setUpConvolutionTextures, setTexture} from "./convolution.js";
 import {setGeometry, setNormals, setTexcoords} from "./buffer.js";
 
@@ -151,7 +151,12 @@ function main() {
 
   let running = false;
   canvas.addEventListener("click", evt => {
-    running = true;
+    if (!running) {
+      disableSpeedChanges();
+      running = true;
+    } else {
+      properties.worldAngle[0] = maxAngle; 
+    }
   });
 
   // Saves the current texture to variable (also after convolution kernel) so that textures do not need to be recalculated if nothing changes
@@ -171,6 +176,8 @@ function main() {
       flipped = false;
       properties.worldAngle[0] = maxAngle % (2 * Math.PI);
       properties.worldTranslation[2] = 0;
+
+      enableSpeedChanges();
 
       maxAngle = maxAngle === 2*Math.PI ? Math.PI : 2*Math.PI;
 

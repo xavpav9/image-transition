@@ -1,5 +1,20 @@
 function handleDom(properties) {
   const canvas = document.querySelector("#c");
+
+  const frontImageInput = document.querySelector("#front-image");
+  frontImageInput.addEventListener("change", function() {
+    properties.frontImageLoaded = false;
+    properties.frontImage.src = URL.createObjectURL(this.files[0]);
+  });
+
+
+  const backImageInput = document.querySelector("#back-image");
+  backImageInput.addEventListener("change", function() {
+    properties.backImageLoaded = false;
+    properties.backImage.src = URL.createObjectURL(this.files[0]);
+  });
+
+
   const zSlider = document.querySelector("#z-slider");
   const zSliderOutput = document.querySelector(".z-slider > output");
   zSlider.addEventListener("input", evt => {
@@ -24,20 +39,6 @@ function handleDom(properties) {
   });
 
 
-  const frontImageInput = document.querySelector("#front-image");
-  frontImageInput.addEventListener("change", function() {
-    properties.frontImageLoaded = false;
-    properties.frontImage.src = URL.createObjectURL(this.files[0]);
-  });
-
-
-  const backImageInput = document.querySelector("#back-image");
-  backImageInput.addEventListener("change", function() {
-    properties.backImageLoaded = false;
-    properties.backImage.src = URL.createObjectURL(this.files[0]);
-  });
-
-
   const rotationSpeedSlider = document.querySelector("#rotation-speed-slider");
   const rotationSpeedOutput = document.querySelector(".rotation-speed-slider > output");
   rotationSpeedSlider.addEventListener("input", function() {
@@ -45,12 +46,14 @@ function handleDom(properties) {
     properties.rotationSpeed = +rotationSpeedSlider.value * Math.PI / 180;
   });
 
+
   const translationSpeedSlider = document.querySelector("#translation-speed-slider");
   const translationSpeedOutput = document.querySelector(".translation-speed-slider > output");
   translationSpeedSlider.addEventListener("input", function() {
     translationSpeedOutput.textContent = translationSpeedSlider.value;
     properties.translationSpeed = -+translationSpeedSlider.value;
   });
+
 
   const thicknessSlider = document.querySelector("#thickness-slider");
   const thicknessOutput = document.querySelector(".thickness-slider > output");
@@ -114,4 +117,36 @@ function handleDom(properties) {
   frontEmboss.dispatchEvent(new Event("input"));
 }
 
-export {handleDom};
+function enableSpeedChanges() {
+  const zSlider = document.querySelector("#z-slider");
+  const widthSlider = document.querySelector("#width-slider");
+  const heightSlider = document.querySelector("#height-slider");
+  const thicknessSlider = document.querySelector("#thickness-slider");
+  const rotationSpeedSlider = document.querySelector("#rotation-speed-slider");
+  const translationSpeedSlider = document.querySelector("#translation-speed-slider");
+
+  zSlider.removeAttribute("disabled");
+  widthSlider.removeAttribute("disabled");
+  heightSlider.removeAttribute("disabled");
+  thicknessSlider.removeAttribute("disabled");
+  rotationSpeedSlider.removeAttribute("disabled");
+  translationSpeedSlider.removeAttribute("disabled");
+}
+
+function disableSpeedChanges() {
+  const zSlider = document.querySelector("#z-slider");
+  const widthSlider = document.querySelector("#width-slider");
+  const heightSlider = document.querySelector("#height-slider");
+  const thicknessSlider = document.querySelector("#thickness-slider");
+  const rotationSpeedSlider = document.querySelector("#rotation-speed-slider");
+  const translationSpeedSlider = document.querySelector("#translation-speed-slider");
+
+  zSlider.setAttribute("disabled", "true");
+  widthSlider.setAttribute("disabled", "true");
+  heightSlider.setAttribute("disabled", "true");
+  thicknessSlider.setAttribute("disabled", "true");
+  rotationSpeedSlider.setAttribute("disabled", "true");
+  translationSpeedSlider.setAttribute("disabled", "true");
+}
+
+export {handleDom, enableSpeedChanges, disableSpeedChanges};
