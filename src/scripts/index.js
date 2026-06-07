@@ -275,6 +275,7 @@ function main() {
     worldTranslation: [0, 0, 0],
     rotationSpeed: 0.5,
     translationSpeed: -90,
+    thickness: 50,
 
     backImage,
     frontImage,
@@ -370,7 +371,7 @@ function main() {
     // worldMatrix = m4.pitchRotate(worldMatrix, properties.worldAngle[0]);
     worldMatrix = m4.yawRotate(worldMatrix, properties.worldAngle[0]);
 
-    worldMatrix = m4.scale(worldMatrix, [gl.canvas.width/100, gl.canvas.height/100, 1]);
+    worldMatrix = m4.scale(worldMatrix, [gl.canvas.width/100, gl.canvas.height/100, properties.thickness / 50]);
 
     worldMatrix = m4.yawRotate(worldMatrix, Math.PI); // partially revert the y-flip from original coords ( will still remain inverted )
     worldMatrix = m4.translate(worldMatrix, [-25,-25,-25]);

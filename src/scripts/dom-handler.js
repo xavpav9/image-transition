@@ -52,12 +52,20 @@ function handleDom(properties) {
     properties.translationSpeed = -+translationSpeedSlider.value;
   });
 
+  const thicknessSlider = document.querySelector("#thickness-slider");
+  const thicknessOutput = document.querySelector(".thickness-slider > output");
+  thicknessSlider.addEventListener("input", function() {
+    thicknessOutput.textContent = thicknessSlider.value;
+    properties.thickness = +thicknessSlider.value;
+  });
+
 
   zSlider.dispatchEvent(new Event("input"));
   widthSlider.dispatchEvent(new Event("input"));
   heightSlider.dispatchEvent(new Event("input"));
   rotationSpeedSlider.dispatchEvent(new Event("input"));
   translationSpeedSlider.dispatchEvent(new Event("input"));
+  thicknessSlider.dispatchEvent(new Event("input"));
 }
 
 export {handleDom};
