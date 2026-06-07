@@ -12,37 +12,87 @@ body {
   display: grid;
   grid-template-columns: 1fr 300px;
   column-gap: 20px;
-  place-items: center;
-  height: 100vh;
-}
-
-.z-slider, .width-slider, .height-slider, .rotation-speed-slider, .translation-speed-slider, .thickness-slider {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  font-family: "Times New Roman" system-ui serif;
-
-  output {
-    grid-column: 1 / 3;
-    place-self: center;
-  }
-}
-
-.files {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  max-height: 100vh;
 }
 
 form {
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  background-color: antiquewhite;
+  border-left: 2px solid black;
+  padding: 20px;
+
+  max-height: 100vh;
+  overflow: auto;
+
+  h3 {
+    text-decoration: underline;
+    text-align: center;
+    margin: 10px 0px;
+  }
+
+  .files {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    #front-image {
+      margin-bottom: 8px;
+    }
+  }
+
+  .sliders {
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      margin-bottom: 8px;
+      font-family: "Times New Roman" system-ui serif;
+
+      output {
+        grid-column: 1 / 3;
+        place-self: center;
+      }
+    }
+  }
+
+  .convolution-kernel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .kernels {
+      display: grid;
+      grid-template: repeat(5, 2rem) / 100px 50px 50px;
+      gap: 2px 20px;
+
+      .header {
+        font-weight: 700;
+      }
+
+      input[type="number"] {
+        appearance: none;
+        border: thin solid black;
+        border-radius: 1px;
+        padding: 0.2rem;
+      }
+    }
+  }
 }
 
-#c {
-  width: 800px;
-  height: 500px;
-  border: 2px solid black;
+.canvas {
+  place-self: center;
+  max-height: 100vh;
+
+  #c {
+    width: 800px;
+    height: 500px;
+    border: 2px solid black;
+  }
 }
