@@ -60,12 +60,57 @@ function handleDom(properties) {
   });
 
 
+  const backBlur = document.querySelector("#back-blur");
+  const frontBlur = document.querySelector("#front-blur");
+  const backSharpen = document.querySelector("#back-sharpen");
+  const frontSharpen = document.querySelector("#front-sharpen");
+  const backEdgeDetect = document.querySelector("#back-edge-detect");
+  const frontEdgeDetect = document.querySelector("#front-edge-detect");
+  const backEmboss = document.querySelector("#back-emboss");
+  const frontEmboss = document.querySelector("#front-emboss");
+
+  const backEffects = [backBlur, backSharpen, backEdgeDetect, backEmboss];
+  const frontEffects = [frontBlur, frontSharpen, frontEdgeDetect, frontEmboss];
+
+  backEffects.concat(frontEffects).forEach(effect => {
+    effect.addEventListener("input", evt => {
+      console.log(effect.dataset.side);
+      if (effect.dataset.side === "back") {
+        properties.backImageEffects = [];
+        backEffects.forEach(currentEffect => {
+          for (let i = 0; i < currentEffect.value; ++i) {
+            properties.backImageEffects.push(currentEffect.dataset.effect);
+          }
+        });
+      } else {
+        properties.frontImageEffects = [];
+        frontEffects.forEach(currentEffect => {
+          for (let i = 0; i < currentEffect.value; ++i) {
+            properties.frontImageEffects.push(currentEffect.dataset.effect);
+          }
+        });
+      }
+    });
+  });
+
+
+
+
   zSlider.dispatchEvent(new Event("input"));
   widthSlider.dispatchEvent(new Event("input"));
   heightSlider.dispatchEvent(new Event("input"));
   rotationSpeedSlider.dispatchEvent(new Event("input"));
   translationSpeedSlider.dispatchEvent(new Event("input"));
   thicknessSlider.dispatchEvent(new Event("input"));
+
+  backBlur.dispatchEvent(new Event("input"));
+  frontBlur.dispatchEvent(new Event("input"));
+  backSharpen.dispatchEvent(new Event("input"));
+  frontSharpen.dispatchEvent(new Event("input"));
+  backEdgeDetect.dispatchEvent(new Event("input"));
+  frontEdgeDetect.dispatchEvent(new Event("input"));
+  backEmboss.dispatchEvent(new Event("input"));
+  frontEmboss.dispatchEvent(new Event("input"));
 }
 
 export {handleDom};

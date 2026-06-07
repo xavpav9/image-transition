@@ -13,41 +13,64 @@
       <form action="" method="">
         <div class="z-slider">
           <label for="z-slider">Z </label>
-          <input type="range" id="z-slider" max="-1" min="-1000" step="0.5" value="-241">
+          <input type="range" id="z-slider" name="z-slider" max="-1" min="-1000" step="0.5" value="-241">
           <output for="z-slider"> </output>
         </div>
         <div class="files">
           <label for="front-image">Front Image </label>
-          <input type="file" id="front-image" accept="image/png, image/jpeg">
+          <input type="file" id="front-image" name="front-image" accept="image/png, image/jpeg">
           <label for="back-image">Back Image </label>
-          <input type="file" id="back-image" accept="image/png, image/jpeg">
+          <input type="file" id="back-image" name="back-image" accept="image/png, image/jpeg">
         </div>
         <div class="width-slider">
           <label for="width-slider">Width</label>
-          <input type="range" id="width-slider" max="800" min="0" step="1" value="800" list="dimensions">
+          <input type="range" id="width-slider" name="width-slider" max="800" min="0" step="1" value="800" list="dimensions">
           <output for="width-slider"> </output>
         </div>
         <div class="height-slider">
           <label for="height-slider">Height</label>
-          <input type="range" id="height-slider" max="500" min="0" step="1" value="500" list="dimensions">
+          <input type="range" id="height-slider" name="height-slider" max="500" min="0" step="1" value="500" list="dimensions">
           <output for="height-slider"> </output>
         </div>
         <div class="rotation-speed-slider">
           <label for="rotation-speed-slider">Rotation Speed</label>
-          <input type="range" id="rotation-speed-slider" max="360" min="1" step="1" value="30" list="rotation-speeds">
+          <input type="range" id="rotation-speed-slider" name="rotation-speed-slider" max="360" min="1" step="1" value="30" list="rotation-speeds">
           <output for="rotation-speed-slider"> </output>
         </div>
 
         <div class="translation-speed-slider">
           <label for="translation-speed-slider">Translation Speed</label>
-          <input type="range" id="translation-speed-slider" max="1000" min="1" step="1" value="90" list="translation-speeds">
+          <input type="range" id="translation-speed-slider" name="translation-speed-slider" max="1000" min="1" step="1" value="90" list="translation-speeds">
           <output for="translation-speed-slider"> </output>
         </div>
 
         <div class="thickness-slider">
           <label for="thickness-slider">Thickness</label>
-          <input type="range" id="thickness-slider" max="1000" min="1" step="1" value="50" list="translation-speeds">
+          <input type="range" id="thickness-slider" name="thickness-slider" max="1000" min="1" step="1" value="50" list="translation-speeds">
           <output for="thickness-slider"> </output>
+        </div>
+
+        <div class="convolution-kernel">
+          <div>
+            <input type="number" id="front-blur" name="front-blur" data-effect="blur" data-side="front" value="0" min="0" max="10">
+            <input type="number" id="back-blur" name="back-blur" data-effect="blur" data-side="back" value="0" min="0" max="10">
+            <label for="back-blur">Blur</label>
+          </div>
+          <div>
+            <input type="number" id="front-sharpen" name="front-sharpen" data-effect="sharpen" data-side="front" value="0" min="0" max="10">
+            <input type="number" id="back-sharpen" name="back-sharpen" data-effect="sharpen" data-side="back" value="0" min="0" max="10">
+            <label for="back-sharpen">Sharpen</label>
+          </div>
+          <div>
+            <input type="number" id="front-edge-detect" name="front-edge-detect" data-effect="edgeDetect" data-side="front" value="0" min="0" max="10">
+            <input type="number" id="back-edge-detect" name="back-edge-detect" data-effect="edgeDetect" data-side="back" value="0" min="0" max="10">
+            <label for="back-edge-detect">Edge Detect</label>
+          </div>
+          <div>
+            <input type="number" id="front-emboss" name="front-emboss" data-effect="emboss" data-side="front" value="0" min="0" max="10">
+            <input type="number" id="back-emboss" name="back-emboss" data-effect="emboss" data-side="back" value="0" min="0" max="10">
+            <label for="back-emboss">Emboss</label>
+          </div>
         </div>
 
         <datalist id="dimensions">

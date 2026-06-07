@@ -135,11 +135,6 @@ function setTexture(gl, originalImageTexture, effectsToApply, textureUnit) {
       -1, 5, -1,
       0, -1, 0,
     ],
-    sharpen: [
-      0, -1, 0,
-      -1, 5, -1,
-      0, -1, 0,
-    ],
     blur: [
       1, 1, 1,
       1, 1, 1,

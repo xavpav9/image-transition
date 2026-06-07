@@ -131,12 +131,15 @@ function main() {
     translationSpeed: -90,
     thickness: 50,
 
-    backImage,
     frontImage,
     frontImageLoaded: false,
     frontImageDimensions: [0, 0],
+    frontImageEffects: [],
+
+    backImage,
     backImageLoaded: false,
     backImageDimensions: [0, 0],
+    backImageEffects: [],
   };
 
   handleDom(properties);
@@ -188,11 +191,11 @@ function main() {
 
     // Apply convolution kernel effects to textures
     if (properties.frontImageLoaded) {
-      setTexture(gl, frontTexture, ["edgeDetect"], 0);
+      setTexture(gl, frontTexture, properties.frontImageEffects, 0);
     }
 
     if (properties.backImageLoaded) {
-      setTexture(gl, backTexture, ["sharpen", "sharpen"], 1);
+      setTexture(gl, backTexture, properties.backImageEffects, 1);
     }
 
 
