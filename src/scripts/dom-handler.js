@@ -74,8 +74,8 @@ function handleDom(properties) {
 
   backEffects.concat(frontEffects).forEach(effect => {
     effect.addEventListener("input", evt => {
-      console.log(effect.dataset.side);
       if (effect.dataset.side === "back") {
+        properties.backConvolutionJustApplied = true;
         properties.backImageEffects = [];
         backEffects.forEach(currentEffect => {
           for (let i = 0; i < currentEffect.value; ++i) {
@@ -83,6 +83,7 @@ function handleDom(properties) {
           }
         });
       } else {
+        properties.frontConvolutionJustApplied = true;
         properties.frontImageEffects = [];
         frontEffects.forEach(currentEffect => {
           for (let i = 0; i < currentEffect.value; ++i) {

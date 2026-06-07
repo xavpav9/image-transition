@@ -167,6 +167,10 @@ function setTexture(gl, originalImageTexture, effectsToApply, textureUnit) {
   }
   gl.bindFramebuffer(gl.FRAMEBUFFER, null); // Clear the framebuffer, so that it renders to the canvas
 
+
+  // Retures the texture so that it can be stored (and not have to recalculated, especially when there are lots of convolution matricies)
+  return (count === 0) ? originalImageTexture : convolutionVars.textures[(count + 1) % 2 + textureUnit*2];
+
   function drawEffect(kernel) {
     let primitiveType, offset, count;
 

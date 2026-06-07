@@ -135,11 +135,13 @@ function main() {
     frontImageLoaded: false,
     frontImageDimensions: [0, 0],
     frontImageEffects: [],
+    frontConvolutionJustApplied: false,
 
     backImage,
     backImageLoaded: false,
     backImageDimensions: [0, 0],
     backImageEffects: [],
+    backConvolutionJustApplied: false,
   };
 
   handleDom(properties);
@@ -151,6 +153,10 @@ function main() {
   canvas.addEventListener("click", evt => {
     running = true;
   });
+
+  // Saves the current texture to variable (also after convolution kernel) so that textures do not need to be recalculated if nothing changes
+  let currentFrontTexture = frontTexture;
+  let currentBackTexture = backTexture;
 
   requestAnimationFrame(drawScene);
 
@@ -190,12 +196,20 @@ function main() {
 
 
     // Apply convolution kernel effects to textures
-    if (properties.frontImageLoaded) {
-      setTexture(gl, frontTexture, properties.frontImageEffects, 0);
+    if (properties.frontImageLoaded && properties.frontConvolutionJustApplied) {
+      currentFrontTexture = setTexture(gl, frontTexture, properties.frontImageEffects, 0);
+      properties.frontConvolutionJustApplied = false;
+    } else {
+      gl.activeTexture(gl.TEXTURE0 + 0);
+      gl.bindTexture(gl.TEXTURE_2D, currentFrontTexture);
     }
 
-    if (properties.backImageLoaded) {
-      setTexture(gl, backTexture, properties.backImageEffects, 1);
+    if (properties.backImageLoaded && properties.backConvolutionJustApplied) {
+      currentBackTexture = setTexture(gl, backTexture, properties.backImageEffects, 1);
+      properties.backConvolutionJustApplied = false;
+    } else {
+      gl.activeTexture(gl.TEXTURE0 + 1);
+      gl.bindTexture(gl.TEXTURE_2D, currentBackTexture);
     }
 
 
