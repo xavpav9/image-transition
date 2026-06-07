@@ -5,8 +5,8 @@ import {handleDom, enableSpeedChanges, disableSpeedChanges} from "./dom-handler.
 import {setUpConvolutionTextures, setTexture} from "./convolution.js";
 import {setGeometry, setNormals, setTexcoords} from "./buffer.js";
 
-import frontImg from "./../res/images/river.jpeg";
-import backImg from "./../res/images/ducks.jpeg";
+import frontImg from "./../res/images/front-image.png";
+import backImg from "./../res/images/back-image.png";
 import fsSource from "./../res/shaders/canvas-fs.txt";
 import vsSource from "./../res/shaders/canvas-vs.txt";
 
