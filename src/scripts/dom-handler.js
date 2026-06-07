@@ -14,6 +14,7 @@ function handleDom(properties) {
   frontImageInput.addEventListener("change", function() {
     properties.frontImageLoaded = false;
     properties.frontImage.src = URL.createObjectURL(this.files[0]);
+    properties.frontConvolutionJustApplied = true;
   });
 
 
@@ -21,6 +22,7 @@ function handleDom(properties) {
   backImageInput.addEventListener("change", function() {
     properties.backImageLoaded = false;
     properties.backImage.src = URL.createObjectURL(this.files[0]);
+    properties.backConvolutionJustApplied = true;
   });
 
 
@@ -43,6 +45,11 @@ function handleDom(properties) {
     } else {
       previousDimensions.setWidth = true;
     }
+
+    setTimeout(() => { // Needs a slight delay so as to prevent the texture being drawn wrong
+      properties.frontConvolutionJustApplied = true;
+      properties.backConvolutionJustApplied = true;
+    }, 1);
   });
 
 
@@ -57,6 +64,11 @@ function handleDom(properties) {
     } else {
       previousDimensions.setHeight = true;
     }
+
+    setTimeout(() => { // Needs a slight delay so as to prevent the texture being drawn wrong
+      properties.frontConvolutionJustApplied = true;
+      properties.backConvolutionJustApplied = true;
+    }, 1);
   });
 
 
