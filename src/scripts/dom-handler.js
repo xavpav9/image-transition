@@ -95,6 +95,37 @@ function handleDom(properties) {
     properties.thickness = +thicknessSlider.value;
   });
 
+  const sideColour = document.querySelector("#side-colour");
+  sideColour.addEventListener("input", function() {
+    const hexMap = {
+      0: 0,
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      5: 5,
+      6: 6,
+      7: 7,
+      8: 8,
+      9: 9,
+      a: 10,
+      b: 11,
+      c: 12,
+      d: 13,
+      e: 14,
+      f: 15,
+    }
+
+    function hexToInt(hex) {
+      return hexMap[hex[0]] * 16 + hexMap[hex[1]];
+    }
+
+    const colour = sideColour.value;
+    const colourArr = [colour.slice(1, 3), colour.slice(3, 5), colour.slice(5, 7), "ff"].map(hexToInt);
+    properties.sideTextureJustApplied = true;
+    properties.colour = colourArr;
+  });
+
 
   const backBlur = document.querySelector("#back-blur");
   const frontBlur = document.querySelector("#front-blur");
@@ -177,6 +208,7 @@ function handleDom(properties) {
   rotationSpeedSlider.dispatchEvent(new Event("input"));
   translationSpeedSlider.dispatchEvent(new Event("input"));
   thicknessSlider.dispatchEvent(new Event("input"));
+  sideColour.dispatchEvent(new Event("input"));
 
   backBlur.dispatchEvent(new Event("input"));
   frontBlur.dispatchEvent(new Event("input"));

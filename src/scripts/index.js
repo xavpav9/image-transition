@@ -142,6 +142,9 @@ function main() {
     backImageDimensions: [0, 0],
     backImageEffects: [],
     backConvolutionJustApplied: false,
+
+    sideTextureJustApplied: false,
+    colour: [200, 200, 200, 255],
   };
 
   handleDom(properties);
@@ -217,6 +220,13 @@ function main() {
     } else {
       gl.activeTexture(gl.TEXTURE0 + 1);
       gl.bindTexture(gl.TEXTURE_2D, currentBackTexture);
+    }
+
+    if (properties.sideTextureJustApplied) {
+      properties.sideTextureJustApplied = false;
+      gl.activeTexture(gl.TEXTURE0 + 2);
+      gl.bindTexture(gl.TEXTURE_2D, sideTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(properties.colour));
     }
 
 

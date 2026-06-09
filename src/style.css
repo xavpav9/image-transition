@@ -64,6 +64,14 @@ form {
     }
   }
 
+  .side-colour {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
   .convolution-kernel {
     display: flex;
     flex-direction: column;
